@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 import os
 import textwrap
-energy_json_path = Path('/pubhome/xtzhang/interaction/data/pdbpairs/total_inteng_comb.json')
+energy_json_path = Path('/pubhome/lzeng/data/pair25/NequipData/TOTAL/total_inteng_comb.json')
 with open(energy_json_path, 'r') as energy_file:
     qm_energy_data = json.load(energy_file)
 with open ("/pubhome/xtzhang/interaction/data/pdbpairs/files.txt", "r") as f:

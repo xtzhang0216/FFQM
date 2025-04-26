@@ -85,8 +85,8 @@ def calc_cmx_ene(top_file1, top_file2, crd_file):
 
 
 # load input para: --fraga --fragb --xyz
-# xyz = sys.argv[1]
-xyz="ACET_ETAM_00"
+xyz = sys.argv[1]
+# xyz="ACEM_ACEM_00"
 
 def write_pdb(ref_mol, mol, pdb_file):
     """
@@ -164,6 +164,7 @@ for idx, mol in enumerate(sdf):
     #     print("Different conformer, skip")
     #     raise ValueError("Different conformer, skip")
 
+    # 
     conf_dir = os.path.join(WORKDIR, f"conf_{idx}")
 
     print(f"Processing conformer {idx + 1} / {total} at {conf_dir} at {datetime.datetime.now()}", flush=True)
@@ -171,15 +172,6 @@ for idx, mol in enumerate(sdf):
     os.chdir(conf_dir)
 
     fraga, fragb = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
-    
-    # if one is aceh, continue, if one is acet, the atom_num musty ==7
-    if fga_name == "ACEH" or fgb_name == "ACEH":
-        continue
-    if fga_name == "ACET" and fraga.GetNumAtoms() != 7:
-        continue
-    if fgb_name == "ACET" and fragb.GetNumAtoms() != 7:
-        continue
-    
     Chem.MolToPDBFile(fraga, f"{fga_name}_a.pdb")
     Chem.MolToPDBFile(fragb, f"{fgb_name}_b.pdb")
     e_a = calc_ene(f"{fga_name}_a.pdb")
@@ -199,72 +191,4 @@ else:
     pair = f"{fga_name}_{fgb_name}"
 output_file = Path(f'/pubhome/xtzhang/interaction/FF/charmm/data/{pair}.csv')
 results_df.to_csv(output_file, mode='a', header=not output_file.exists())
-
-
-
-#%%
-rot_sdf_path = next((path for path in Path('/pubhome/lzeng/data/pair25/rot_split/').glob(f'*{xyz}*')), None)
-if rot_sdf_path:
-    rot_sdf = Chem.SDMolSupplier(str(rot_sdf_path), removeHs=False)
-else:
-    print(f"No rotated SDF file found for {xyz}")
-    rot_sdf = None
-
-rot_ene = {k: v for k, v in ene.items() if k.startswith('rot')}
-if rot_ene:
-    for idx, mol in enumerate(rot_sdf):
-
-        # start_time = time.time()
-        # with open(f"{WORKDIR}/log.txt", "a") as log_file:
-        #     log_file.write(f"Processing conformer {idx + 1} / {total}\n")
-        # if idx > 500:
-        #     break
-        if f"rot_{idx}" not in rot_ene.keys():
-            continue
-        if mol is None:
-            continue
-        fga_name, fgb_name = mol.GetProp("FRAG_NAME").split()
-        # if fga_name == ref_fga_name and fgb_name == ref_fgb_name:
-        #     pass
-        # elif fga_name == ref_fgb_name and fgb_name == ref_fga_name:
-        #     ref_fga_name, ref_fgb_name = fgb_name, fga_name
-        #     ref_fga, ref_fgb = ref_fgb, ref_fga
-        # else:
-        #     print("Different conformer, skip")
-        #     raise ValueError("Different conformer, skip")
-
-        conf_dir = os.path.join(WORKDIR, f"conf_{idx}")
-
-        print(f"Processing conformer {idx + 1} / {total} at {conf_dir} at {datetime.datetime.now()}", flush=True)
-        os.makedirs(conf_dir, exist_ok=True)
-        os.chdir(conf_dir)
-
-        fraga, fragb = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
         
-        # if one is aceh, continue, if one is acet, the atom_num musty ==7
-        if fga_name == "ACEH" or fgb_name == "ACEH":
-            continue
-        if fga_name == "ACET" and fraga.GetNumAtoms() != 7:
-            continue
-        if fgb_name == "ACET" and fragb.GetNumAtoms() != 7:
-            continue
-        
-        Chem.MolToPDBFile(fraga, f"{fga_name}_a.pdb")
-        Chem.MolToPDBFile(fragb, f"{fgb_name}_b.pdb")
-        e_a = calc_ene(f"{fga_name}_a.pdb")
-        e_b = calc_ene(f"{fgb_name}_b.pdb")
-        write_cmx_pdb(fraga, fragb, f"{fga_name}_{fgb_name}.pdb")
-        e_complex = calc_ene(f"{fga_name}_{fgb_name}.pdb")
-        interaction_energy = e_complex - (e_a + e_b)
-        qm_ene = rot_ene[f"rot_{idx}"]
-        results[str(idx)] = [round(interaction_energy, 2), round(qm_ene, 2)]
-
-        os.chdir("../")
-    results_df = pd.DataFrame.from_dict(results, orient='index', columns=['FF_Energy', 'QM_Energy'])
-    results_df.index.name = 'Index'
-    if fgb_name[0] < fga_name[0]:
-        pair = f"{fgb_name}_{fga_name}"
-    else:
-        pair = f"{fga_name}_{fgb_name}"
-    output_file = Path(f'/pubhome/xtzhang/interaction/FF/charmm/data/{pair}.csv')
-    results_df.to_csv(output_file, mode='a', header=not output_file.exists())
