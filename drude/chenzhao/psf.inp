@@ -1,0 +1,4 @@
+stream toppar_drude.str
+
+open read unit 10 card name mime_b.crd
+read sequence coor unit 10 RESI

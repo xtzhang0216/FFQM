@@ -1,0 +1,13 @@
+; energy_direct.mdp
+integrator               = md
+nsteps                   = 0         ; 仅计算单点能量
+cutoff-scheme            = Verlet
+verlet-buffer-tolerance  = 0.001
+coulombtype              = PME       ; 使用PME处理长程静电
+rcoulomb                 = 1.2       ; 静电截断距离（单位：nm）
+rvdw                     = 1.2       ; 范德华截断距离（单位：nm）
+pbc                      = xyz       ; 周期性边界条件
+
+; 定义能量组并计算组间相互作用
+energygrps               = MolA MolB
+energygrp-table          = MolA MolB ; 输出组间非键能

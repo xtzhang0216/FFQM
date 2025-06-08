@@ -1,0 +1,67 @@
+pdbid            = fraga                                      # PDBID of protein
+toppar           = toppar_drude_openmm.str                   # Path to toppar.str file
+psffile          = etoh.psf                                  # Path to .psf file
+pdbfile          = etoh.pdb                                  # Path to .pdb file
+
+mini_nstep       = 0                                      # Number of steps for minimization
+mini_Tol         = 10.0                                      # Minimization energy tolerance(kj/mol)
+gen_vel          = yes                                       # Generate initial velocities
+gen_temp         = 298.15                                    # Temperature for generating initial velocities (K)
+gen_seed         = None                                      # Seed for generating initial velocities
+
+nvt_nstep        = 0                                     # Number of steps for NVT equilibrium 
+nvt_nstout       = 100                                       # Writing output frequency (steps)
+nvt_nstdcd       = 500                                     # Writing coordinates trajectory frequency (steps)
+nvt_dt           = 0.001                                     # Time-step of NVT (ps)
+
+npt_nstep        = 0                                     # Number of steps for NPT equilibrium
+npt_nstout       = 100                                       # Writing output frequency (steps)
+npt_nstdcd       = 50000                                     # Writing coordinates trajectory frequency
+npt_dt           = 0.001                                    # Time-step of NPT (ps)
+
+reduce_nstep     = 0                                   # Number of steps for reduce restraint NPT
+reduce_nstout    = 100                                      # Writing output frequency (steps)
+reduce_nstdcd    = 50000                                    # Writing coordinates trajectory frequency
+reduce_dt        = 0.001                                    # Time-step of reduce restraint
+turn             = 5                                        # The number of turns to reduce restraints
+
+start            = 0                                         # Start number of simulation
+end              = 10                                        # End number of simulations
+nstep            = 0                                   # Number of steps to run
+dt               = 0.001                                     # Time-step (ps)
+nstout           = 10000                                      # Writing output frequency (steps)
+nstdcd           = 10000                                      # Writing coordinates trajectory frequency (steps)
+
+coulomb          = PME                                       # Electrostatic cut-off method
+ewald_Tol        = 0.0001                                    # Ewald error tolerance
+vdw              = Switch                                    # vdW cut-off method
+r_on             = 1.0                                       # Switch-on distance (nm)
+r_off            = 1.2                                       # Switch-off distance (nm)
+
+temp             = 298.15                                    # Temperature (K)
+fric_coeff       = 5                                         # Friction coefficient for Langevin dynamics
+
+drude_temp       = 1.0                                       # Drude Temperature (K)
+drude_fric_coeff = 20                                        # Drude Friction coefficient for Langevin dynamics
+drude_hardwall   = 0.025                                     # Drude Hardwall(nm)
+
+pcouple          = yes                                       # Turn on/off pressure coupling
+p_ref            = 1.0                                       # Pressure (Pref or Pxx, Pyy, Pzz; bar)
+p_type           = isotropic                                 # MonteCarloBarotat type
+p_scalex         = True                                      # whether to allow the X dimension of the periodic box to change size
+p_scaley         = True                                      # whether to allow the Y dimension of the periodic box to change size
+p_scalez         = True                                      # whether to allow the Z dimension of the periodic box to change size
+p_XYMode         = MonteCarloMembraneBarostat.XYIsotropic    # For MonteCarloMembraneBarostat
+p_ZMode          = MonteCarloMembraneBarostat.ZFree          # For MonteCarloMembraneBarostat
+p_tens           = 0.0                                       # Sulface tension for MonteCarloMembraneBarostat (dyne/cm)
+p_freq           = 15                                        # Pressure coupling frequency (steps)
+cons             = HBonds                                    # Constraints mehtod
+
+rest             = no                                        # Turn on/off restraints
+rest_type        = CA                                        # restrain alpha carbon or all heavy atoms(CA/all)
+fc_pos           = 50.208                                    # Positional restraint force constant(kj/mol*nm2)
+ftype            = drude                                     # Type of force field
+
+rest_lig         = no                                        # Turn on/off range restraints on ligand
+fc_pos_lig       = 1000.0                                    # Positional restraint force constant on ligand when the ligand run out of pocket
+pocket           = 10                                        # The radius of pocket(A)

@@ -1,0 +1,14 @@
+TITLE     ETOH optimized with Gaussian
+MODEL     1
+ATOM      1  C   ETOH    1       1.214  -0.240   0.021  1.00  0.00           C
+ATOM      2  H   ETOH    1       1.281  -0.952  -0.809  1.00  0.00           H
+ATOM      3  H   ETOH    1       1.265  -0.804   0.956  1.00  0.00           H
+ATOM      4  H   ETOH    1       2.086   0.419  -0.036  1.00  0.00           H
+ATOM      5  C   ETOH    1      -0.083   0.558  -0.047  1.00  0.00           C
+ATOM      6  H   ETOH    1      -0.127   1.279   0.773  1.00  0.00           H
+ATOM      7  H   ETOH    1      -0.129   1.128  -0.985  1.00  0.00           H
+ATOM      8  O   ETOH    1      -1.240  -0.260   0.108  1.00  0.00           O
+ATOM      9  H   ETOH    1      -1.249  -0.894  -0.616  1.00  0.00           H
+TER
+ENDMDL
+END

@@ -11,11 +11,12 @@ from pathlib import Path
 import sys
 from openmm.app import AmberPrmtopFile, AmberInpcrdFile
 from openmm import System, Context, Platform
-from openmm.unit import *
+from openmm import unit
 from openmm.app import NoCutoff,PDBFile
 from openmm import VerletIntegrator
 from openmm.app import ForceField
 import datetime
+import argparse
 
 #%%
      
@@ -42,8 +43,8 @@ def mapping(frag, query,id):
 
 def calc_ene( crd_file):
     # Load the topology and coordinates
-    # psf = ForceField("/pubhome/xtzhang/interaction/FF/charmm/charmm36.zxt.xml")
-    psf = ForceField('/pubhome/xtzhang/interaction/FF/opls/param/opls.zxt.xml','tip3p.xml') 
+    # psf = ForceField("/pubhome/xtzhang/interaction/FF/opls/opls36.zxt.xml")
+    psf = ForceField('/pubhome/xtzhang/interaction/FF/opls/opls.zxt.xml','tip3p.xml') 
 
     pdb = PDBFile(crd_file)
     for res in pdb.topology.residues():
@@ -53,13 +54,12 @@ def calc_ene( crd_file):
         nonbondedMethod=NoCutoff,
         constraints=None,
     )
-    integrator = VerletIntegrator(0.001 * picoseconds)  # 步长设为极小值（不影响单点能量计算）
+    integrator = VerletIntegrator(0.001 * unit.picoseconds)  # 步长设为极小值（不影响单点能量计算）
     context = Context(system, integrator)
     context.setPositions(pdb.positions)
     state = context.getState(getEnergy=True)
-    potential_energy = state.getPotentialEnergy().value_in_unit(kilocalories_per_mole)
+    potential_energy = state.getPotentialEnergy().value_in_unit(unit.kilocalories_per_mole)
     return potential_energy
-import xml.etree.ElementTree as ET
 
 
 
@@ -76,17 +76,18 @@ def calc_cmx_ene(top_file1, top_file2, crd_file):
         nonbondedMethod=NoCutoff,
         constraints=None,
     )
-    integrator = VerletIntegrator(0.001 * picoseconds)  # 步长设为极小值（不影响单点能量计算）
+    integrator = VerletIntegrator(0.001 * unit.picoseconds)  # 步长设为极小值（不影响单点能量计算）
     context = Context(system, integrator)
     context.setPositions(pdb.positions)
     state = context.getState(getEnergy=True)
-    potential_energy = state.getPotentialEnergy().value_in_unit(kilocalories_per_mole)
+    potential_energy = state.getPotentialEnergy().value_in_unit(unit.kilocalories_per_mole)
     return potential_energy
 
 
 # load input para: --fraga --fragb --xyz
-xyz = sys.argv[1]
-# xyz="ETAM_HOH_00"
+# xyz = sys.argv[1]
+# start = int(sys.argv[2])
+# end = int(sys.argv[3])
 
 def write_pdb(ref_mol, mol, pdb_file):
     """
@@ -119,77 +120,242 @@ def write_cmx_pdb(mol1,mol2,pdb_file):
 
 
     
-opls_para = "/pubhome/xtzhang/interaction/FF/opls/para"
-energy_json_path = Path('/pubhome/xtzhang/interaction/data/pdbpairs/total_inteng_comb.json')
-with open(energy_json_path, 'r') as energy_file:
-    qm_energy_data = json.load(energy_file)
-# for key in qm_energy_data.keys():
-ene = qm_energy_data[f"{xyz}.xyz"]
-results = {}
-with open ("/pubhome/xtzhang/interaction/data/pdbpairs/files.txt", "r") as f:
-    lines = f.readlines()
-sdfpath = next((line for line in lines if xyz in line), None)
-sdfpath = sdfpath.strip()
-sdf = Chem.SDMolSupplier(sdfpath, removeHs=False)
-# Settings
-import tempfile
-import time
-WORKDIR = tempfile.mkdtemp(prefix=f"{xyz}_")
-total = len(sdf)
-mol = sdf[0]
-idx=0
-# ref_fga_name, ref_fgb_name = mol.GetProp("FRAG_NAME").split()
-# ref_file1 = f"{opls_para}/{ref_fga_name}.pdb"
-# ref_file2 = f"{opls_para}/{ref_fgb_name}.pdb"
-# ref_fga = Chem.MolFromPDBFile(ref_file1, removeHs=False)
-# ref_fgb = Chem.MolFromPDBFile(ref_file2, removeHs=False)
+# opls_para = "/pubhome/xtzhang/interaction/FF/opls/para"
+# energy_json_path = Path('/pubhome/lzeng/data/pair25/NequipData/TOTAL/total_inteng_comb.json')
+# with open(energy_json_path, 'r') as energy_file:
+#     qm_energy_data = json.load(energy_file)
+# # for key in qm_energy_data.keys():
+# ene = qm_energy_data[f"{xyz}.xyz"]
+# results = {}
+# with open ("/pubhome/xtzhang/interaction/data/pdbpairs/files.txt", "r") as f:
+#     lines = f.readlines()
+# sdfpath = next((line for line in lines if xyz in line), None)
+# sdfpath = sdfpath.strip()
+# sdf = Chem.SDMolSupplier(sdfpath, removeHs=False)
+# # Settings
+# import tempfile
+# import time
+# WORKDIR = tempfile.mkdtemp(prefix=f"{xyz}_")
+# total = len(sdf)
+# mol = sdf[0]
+# idx=0
+# # ref_fga_name, ref_fgb_name = mol.GetProp("FRAG_NAME").split()
+# # ref_file1 = f"{opls_para}/{ref_fga_name}.pdb"
+# # ref_file2 = f"{opls_para}/{ref_fgb_name}.pdb"
+# # ref_fga = Chem.MolFromPDBFile(ref_file1, removeHs=False)
+# # ref_fgb = Chem.MolFromPDBFile(ref_file2, removeHs=False)
     
-for idx, mol in enumerate(sdf):
+# for idx in range(start, end):
 
-    # start_time = time.time()
-    # with open(f"{WORKDIR}/log.txt", "a") as log_file:
-    #     log_file.write(f"Processing conformer {idx + 1} / {total}\n")
-    # if idx > 50:
-    #     break
-    if str(idx) not in ene.keys():
-        continue
-    if mol is None:
-        continue
-    fga_name, fgb_name = mol.GetProp("FRAG_NAME").split()
-    # if fga_name == ref_fga_name and fgb_name == ref_fgb_name:
-    #     pass
-    # elif fga_name == ref_fgb_name and fgb_name == ref_fga_name:
-    #     ref_fga_name, ref_fgb_name = fgb_name, fga_name
-    #     ref_fga, ref_fgb = ref_fgb, ref_fga
+#     start_time = time.time()
+#     if str(idx) not in ene.keys():
+#         continue
+#     mol = sdf[idx]
+#     if mol is None:
+#         continue
+#     fga_name, fgb_name = mol.GetProp("FRAG_NAME").split()
+#     # if fga_name == ref_fga_name and fgb_name == ref_fgb_name:
+#     #     pass
+#     # elif fga_name == ref_fgb_name and fgb_name == ref_fga_name:
+#     #     ref_fga_name, ref_fgb_name = fgb_name, fga_name
+#     #     ref_fga, ref_fgb = ref_fgb, ref_fga
+#     # else:
+#     #     print("Different conformer, skip")
+#     #     raise ValueError("Different conformer, skip")
+
+#     # 
+#     conf_dir = os.path.join(WORKDIR, f"conf_{idx}")
+
+#     print(f"Processing conformer {idx + 1} / {total} at {conf_dir} at {datetime.datetime.now()}", flush=True)
+#     os.makedirs(conf_dir, exist_ok=True)
+#     os.chdir(conf_dir)
+
+#     fraga, fragb = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
+#     # if one is aceh, continue, if one is acet, the atom_num musty ==7
+#     if fga_name == "ACEH" or fgb_name == "ACEH":
+#         continue
+#     if fga_name == "ACET" and fraga.GetNumAtoms() != 7:
+#         continue
+#     if fgb_name == "ACET" and fragb.GetNumAtoms() != 7:
+#         continue
+#     Chem.MolToPDBFile(fraga, f"{fga_name}_a.pdb")
+#     Chem.MolToPDBFile(fragb, f"{fgb_name}_b.pdb")
+#     e_a = calc_ene(f"{fga_name}_a.pdb")
+#     e_b = calc_ene(f"{fgb_name}_b.pdb")
+#     write_cmx_pdb(fraga, fragb, f"{fga_name}_{fgb_name}.pdb")
+#     e_complex = calc_ene(f"{fga_name}_{fgb_name}.pdb")
+#     interaction_energy = e_complex - (e_a + e_b)
+#     qm_ene = ene[str(idx)]
+#     results[str(idx)] = [round(interaction_energy, 2), round(qm_ene, 2)]
+
+#     os.chdir("../")
+#     shutil.rmtree(conf_dir)
+# os.chdir("/")
+# shutil.rmtree(WORKDIR)
+# results_df = pd.DataFrame.from_dict(results, orient='index', columns=['FF_Energy', 'QM_Energy'])
+# results_df.index.name = 'Index'
+# if fgb_name < fga_name:
+#     pair = f"{fgb_name}_{fga_name}"
+# else:
+#     pair = f"{fga_name}_{fgb_name}"
+# output_file = Path(f'/pubhome/xtzhang/interaction/FF/opls/data/{pair}.csv')
+# results_df.to_csv(output_file, mode='a', header=not output_file.exists())
+
+
+
+#%%
+# rot_sdf_path = next((path for path in Path('/pubhome/lzeng/data/pair25/rot_split/').glob(f'*{xyz}*')), None)
+# if rot_sdf_path:
+#     rot_sdf = Chem.SDMolSupplier(str(rot_sdf_path), removeHs=False)
+# else:
+#     print(f"No rotated SDF file found for {xyz}")
+#     rot_sdf = None
+
+# rot_ene = {k: v for k, v in ene.items() if k.startswith('rot')}
+# if rot_ene:
+    
+    # for idx, mol in enumerate(rot_sdf):
+
+    #     # start_time = time.time()
+    #     # with open(f"{WORKDIR}/log.txt", "a") as log_file:
+    #     #     log_file.write(f"Processing conformer {idx + 1} / {total}\n")
+    #     # if idx > 50:
+    #     #     break
+    #     if f"rot-{idx}" not in rot_ene.keys():
+    #         continue
+    #     if mol is None:
+    #         continue
+    #     fga_name, fgb_name = mol.GetProp("FRAG_NAME").split()
+    #     # if fga_name == ref_fga_name and fgb_name == ref_fgb_name:
+    #     #     pass
+    #     # elif fga_name == ref_fgb_name and fgb_name == ref_fga_name:
+    #     #     ref_fga_name, ref_fgb_name = fgb_name, fga_name
+    #     #     ref_fga, ref_fgb = ref_fgb, ref_fga
+    #     # else:
+    #     #     print("Different conformer, skip")
+    #     #     raise ValueError("Different conformer, skip")
+
+    #     # 
+    #     conf_dir = os.path.join(WORKDIR, f"conf_{idx}")
+
+    #     print(f"Processing conformer {idx + 1} / {total} at {conf_dir} at {datetime.datetime.now()}", flush=True)
+    #     os.makedirs(conf_dir, exist_ok=True)
+    #     os.chdir(conf_dir)
+
+    #     fraga, fragb = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
+    #     # if one is aceh, continue, if one is acet, the atom_num musty ==7
+    #     if fga_name == "ACEH" or fgb_name == "ACEH":
+    #         continue
+    #     if fga_name == "ACET" and fraga.GetNumAtoms() != 7:
+    #         continue
+    #     if fgb_name == "ACET" and fragb.GetNumAtoms() != 7:
+    #         continue
+    #     Chem.MolToPDBFile(fraga, f"{fga_name}_a.pdb")
+    #     Chem.MolToPDBFile(fragb, f"{fgb_name}_b.pdb")
+    #     e_a = calc_ene(f"{fga_name}_a.pdb")
+    #     e_b = calc_ene(f"{fgb_name}_b.pdb")
+    #     write_cmx_pdb(fraga, fragb, f"{fga_name}_{fgb_name}.pdb")
+    #     e_complex = calc_ene(f"{fga_name}_{fgb_name}.pdb")
+    #     interaction_energy = e_complex - (e_a + e_b)
+    #     qm_ene = rot_ene[f"rot-{idx}"]
+    #     results[f"rot-{idx}"] = [round(interaction_energy, 2), round(qm_ene, 2)]
+
+    #     os.chdir("../")
+    # results_df = pd.DataFrame.from_dict(results, orient='index', columns=['FF_Energy', 'QM_Energy'])
+    # results_df.index.name = 'Index'
+    # if fgb_name[0] < fga_name[0]:
+    #     pair = f"{fgb_name}_{fga_name}"
     # else:
-    #     print("Different conformer, skip")
-    #     raise ValueError("Different conformer, skip")
+    #     pair = f"{fga_name}_{fgb_name}"
+    # output_file = Path(f'/pubhome/xtzhang/interaction/FF/opls/data/{pair}.csv')
+    # results_df.to_csv(output_file, mode='a', header=not output_file.exists())
 
-    # 
-    conf_dir = os.path.join(WORKDIR, f"conf_{idx}")
+def check_nh_distance(fragA, fragB, fragA_name, idx):
+    if fragA_name not in ["ACEM", "MIMM", "MIME", "MIMD"]:
+        return True
+    for atomA in fragA.GetAtoms():
+        if atomA.GetSymbol() == 'N':
+            for neighbor in atomA.GetNeighbors():
+                if neighbor.GetSymbol() == 'H':
+                    posH = fragA.GetConformer().GetAtomPosition(neighbor.GetIdx())
+                    for atomB in fragB.GetAtoms():
+                        posB = fragB.GetConformer().GetAtomPosition(atomB.GetIdx())
+                        dist = ((posH.x-posB.x)**2 + (posH.y-posB.y)**2 + (posH.z-posB.z)**2)**0.5
+                        if dist < 1.5:
+                            print(f"[Warning] {fragA_name}-N-H...atom distance < 1.5A at conformer {idx}, skip.")
+                            return False
+    return True
 
-    print(f"Processing conformer {idx + 1} / {total} at {conf_dir} at {datetime.datetime.now()}", flush=True)
-    os.makedirs(conf_dir, exist_ok=True)
-    os.chdir(conf_dir)
+def main():
+    parser = argparse.ArgumentParser(description='OPLS OpenMM energy calculation')
+    parser.add_argument('--xyz', type=str, default="ACEM_ACEM_00", help='xyz name, e.g. ACEM_HOH_00')
+    parser.add_argument('--start', type=int, default=0, help='start index for sdf conformers')
+    parser.add_argument('--end', type=int, default=100, help='end index for sdf conformers (exclusive)')
+    parser.add_argument('--check_nh', type=bool, default=True, help='check N-H distance for specific molecules')
+    args = parser.parse_args()
 
-    fraga, fragb = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
-    Chem.MolToPDBFile(fraga, f"{fga_name}_a.pdb")
-    Chem.MolToPDBFile(fragb, f"{fgb_name}_b.pdb")
-    e_a = calc_ene(f"{fga_name}_a.pdb")
-    e_b = calc_ene(f"{fgb_name}_b.pdb")
-    write_cmx_pdb(fraga, fragb, f"{fga_name}_{fgb_name}.pdb")
-    e_complex = calc_ene(f"{fga_name}_{fgb_name}.pdb")
-    interaction_energy = e_complex - (e_a + e_b)
-    qm_ene = ene[str(idx)]
-    results[str(idx)] = [round(interaction_energy, 2), round(qm_ene, 2)]
+    xyz = args.xyz
+    start = args.start
+    end = args.end
 
-    os.chdir("../")
-results_df = pd.DataFrame.from_dict(results, orient='index', columns=['FF_Energy', 'QM_Energy'])
-results_df.index.name = 'Index'
-if fgb_name[0] < fga_name[0]:
-    pair = f"{fgb_name}_{fga_name}"
-else:
-    pair = f"{fga_name}_{fgb_name}"
-output_file = Path(f'/pubhome/xtzhang/interaction/FF/opls/data/{pair}.csv')
-results_df.to_csv(output_file, mode='a', header=not output_file.exists())
-        
+    energy_json_path = Path('/pubhome/lzeng/data/pair25/NequipData/TOTAL/total_inteng_comb.json')
+    with open(energy_json_path, 'r') as energy_file:
+        qm_energy_data = json.load(energy_file)
+    ene = qm_energy_data[f"{xyz}.xyz"]
+    results = {}
+    with open ("/pubhome/xtzhang/interaction/data/pdbpairs/files.txt", "r") as f:
+        lines = f.readlines()
+    sdfpath = next((line for line in lines if xyz in line), None)
+    sdfpath = sdfpath.strip()
+    sdf = Chem.SDMolSupplier(sdfpath, removeHs=False)
+    import tempfile
+    import time
+    WORKDIR = tempfile.mkdtemp(prefix=f"{xyz}_")
+    total = len(sdf)
+    if end is None or end > total:
+        end = total
+    for idx in range(start, end):
+        if str(idx) not in ene.keys():
+            continue
+        mol = sdf[idx]
+        if mol is None:
+            continue
+        fga_name, fgb_name = mol.GetProp("FRAG_NAME").split()
+        fraga, fragb = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
+        if fga_name == "ACEH" or fgb_name == "ACEH":
+            continue
+        if fga_name == "ACET" and fraga.GetNumAtoms() != 7:
+            continue
+        if fgb_name == "ACET" and fragb.GetNumAtoms() != 7:
+            continue
+        if args.check_nh:
+            if not check_nh_distance(fraga, fragb, fga_name, idx) or not check_nh_distance(fragb, fraga, fgb_name, idx):
+                continue
+        conf_dir = os.path.join(WORKDIR, f"conf_{idx}")
+        print(f"Processing conformer {idx} / {total} at {conf_dir} at {datetime.datetime.now()}", flush=True)
+        os.makedirs(conf_dir, exist_ok=True)
+        os.chdir(conf_dir)
+        Chem.MolToPDBFile(fraga, f"{fga_name}_a.pdb")
+        Chem.MolToPDBFile(fragb, f"{fgb_name}_b.pdb")
+        e_a = calc_ene(f"{fga_name}_a.pdb")
+        e_b = calc_ene(f"{fgb_name}_b.pdb")
+        write_cmx_pdb(fraga, fragb, f"{fga_name}_{fgb_name}.pdb")
+        e_complex = calc_ene(f"{fga_name}_{fgb_name}.pdb")
+        interaction_energy = e_complex - (e_a + e_b)
+        qm_ene = ene[str(idx)]
+        results[str(idx)] = [round(interaction_energy, 2), round(qm_ene, 2)]
+        os.chdir("../")
+        shutil.rmtree(conf_dir)
+    os.chdir("/")
+    shutil.rmtree(WORKDIR)
+    results_df = pd.DataFrame.from_dict(results, orient='index', columns=['FF_Energy', 'QM_Energy'])
+    results_df.index.name = 'Index'
+    if fgb_name < fga_name:
+        pair = f"{fgb_name}_{fga_name}"
+    else:
+        pair = f"{fga_name}_{fgb_name}"
+    output_file = Path(f'/pubhome/xtzhang/interaction/FF/opls/data/{pair}.csv')
+    results_df.to_csv(output_file, mode='a', header=not output_file.exists())
+
+if __name__ == "__main__":
+    main()

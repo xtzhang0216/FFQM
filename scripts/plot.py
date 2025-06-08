@@ -11,7 +11,7 @@ import glob
 import os
 
 
-def plot(files, nraws, title):
+def plot(files, nraws, title, name="FF_Energy"):
     num_plots = len(files)
     rows_needed = num_plots // nraws if num_plots % nraws == 0 else num_plots // nraws + 1
     # rows_needed = 1
@@ -25,22 +25,28 @@ def plot(files, nraws, title):
         pair_name = os.path.basename(csv_path).split(".")[0]
 
         predict_testset_df = pd.read_csv(csv_path)
+        # remove rot- rows
+        predict_testset_df = predict_testset_df[~predict_testset_df['Index'].astype(str).str.startswith('rot-')]
         # remove identical rows
-        
+        predict_testset_df = predict_testset_df.drop_duplicates(subset=["Index", "QM_Energy", name])
+
         predict_testset_df = predict_testset_df[predict_testset_df["QM_Energy"] <= 50]
-        predict_testset_df = predict_testset_df[predict_testset_df["FF_Energy"] <= 50]
+        predict_testset_df = predict_testset_df[predict_testset_df[name] <= 50]
+        predict_testset_df = predict_testset_df[predict_testset_df[name] >= -300]
+        predict_testset_df = predict_testset_df[predict_testset_df["QM_Energy"] >= -500]
+        # print(f"QM_Energy max: {predict_testset_df['QM_Energy'].max():.2f}, min: {predict_testset_df['QM_Energy'].min():.2f}")
+        # print(f"charmm_inter_energy max: {predict_testset_df['charmm_inter_energy'].max():.2f}, min: {predict_testset_df['charmm_inter_energy'].min():.2f}")
         if len(predict_testset_df) == 0:
             print(f"Warning: {pair_name} has no data after filtering.")
             continue        
         qm_energy = predict_testset_df["QM_Energy"]
-        ff_energy = predict_testset_df["FF_Energy"]
+        FF_Energy = predict_testset_df[name]
 
-        correlation = np.corrcoef(qm_energy, ff_energy)[0, 1]
+        correlation = np.corrcoef(qm_energy, FF_Energy)[0, 1]
         rsquared = correlation ** 2
-        mae = mean_absolute_error(qm_energy, ff_energy)
-        # the min in qm_energy
+        mae = mean_absolute_error(qm_energy, FF_Energy)
         row, col = divmod(files.index(csv_path), nraws)
-        ax[row, col].scatter(qm_energy, ff_energy, s=10)
+        ax[row, col].scatter(qm_energy, FF_Energy, s=10)
         ax[row, col].plot(qm_energy, qm_energy, color='red', linestyle='--', linewidth=1)  # y=x line
         ax[row, col].tick_params(axis='x', labelsize=24)
         ax[row, col].tick_params(axis='y', labelsize=24)
@@ -94,7 +100,7 @@ name_dict = {
 name1 = "polar"
 name2 = "polar"
 import os
-os.chdir("/pubhome/xtzhang/interaction/FF/opls/data")
+os.chdir("/pubhome/xtzhang/interaction/FF/charmm/data")
 files = []
 for fga_name in name_dict[name1]:
     for fgb_name in name_dict[name2]:
@@ -102,7 +108,7 @@ for fga_name in name_dict[name1]:
         #     continue
         # with open (os.path.join(folder, f"{fga_name}_{fgb_name}.csv"), "r") as f:
         #     lines = f.readlines()
-        # lines[0] = "Index,FF_Energy,QM_Energy\n"
+        # lines[0] = "Index,charmm_inter_energy,QM_Energy\n"
         # with open (os.path.join(folder, f"{fga_name}_{fgb_name}.csv"), "w") as f:
         #     f.writelines(lines)
         # filename = f"{fga_name}_{fgb_name}.csv"
@@ -115,7 +121,6 @@ for fga_name in name_dict[name1]:
             files.append( f"{fgb_name}_{fga_name}.csv")
         else:
             print(f"Warning: {fga_name}_{fgb_name}.csv not found.")
+plot(files, 7, f"{name1}-{name2}", "FF_Energy")
 
-
-files = ["ETOH_MGDM.csv"]
-plot(files, 1, f"{name1}-{name2}")
+# %%

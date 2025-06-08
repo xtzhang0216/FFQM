@@ -1,0 +1,24 @@
+* Generate PSF from PDB and CRD
+* 
+
+stream toppar.str
+stream n1pa.str
+
+
+! Read PDB and CRD
+read sequence pdb name n1pa.pdb
+generate A setup
+
+! Coordinates from CRD (or PDB if you prefer)
+! open read card unit 10 name N1PA_A.CRD
+! read sequence coor unit 10 RESI
+! generate HETA setup warn first none last none
+
+! If you want to fill in any missing coordinates from PDB:
+! read coor pdb name input.pdb
+
+! Write out PSF and coordinates
+write psf card name output.psf
+write coor card name output.crd
+
+stop

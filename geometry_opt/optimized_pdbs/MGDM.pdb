@@ -1,0 +1,18 @@
+TITLE     MGDM optimized with Gaussian
+MODEL     1
+ATOM      1  C   MGDM    1      -1.967  -0.047  -0.049  1.00  0.00           C
+ATOM      2  H   MGDM    1      -2.695  -0.834  -0.231  1.00  0.00           H
+ATOM      3  H   MGDM    1      -1.997   0.643  -0.894  1.00  0.00           H
+ATOM      4  H   MGDM    1      -2.243   0.471   0.874  1.00  0.00           H
+ATOM      5  N   MGDM    1      -0.642  -0.667   0.056  1.00  0.00           N
+ATOM      6  H   MGDM    1      -0.604  -1.656   0.250  1.00  0.00           H
+ATOM      7  C   MGDM    1       0.514  -0.006   0.017  1.00  0.00           C
+ATOM      8  N   MGDM    1       0.531   1.330   0.011  1.00  0.00           N
+ATOM      9  H   MGDM    1      -0.296   1.867   0.215  1.00  0.00           H
+ATOM     10  H   MGDM    1       1.376   1.841  -0.192  1.00  0.00           H
+ATOM     11  N   MGDM    1       1.671  -0.681  -0.030  1.00  0.00           N
+ATOM     12  H   MGDM    1       1.695  -1.671  -0.219  1.00  0.00           H
+ATOM     13  H   MGDM    1       2.553  -0.221   0.131  1.00  0.00           H
+TER
+ENDMDL
+END

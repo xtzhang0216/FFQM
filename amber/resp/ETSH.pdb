@@ -1,0 +1,14 @@
+TITLE     ETSH optimized with Gaussian
+MODEL     1
+ATOM      1  C   ETSH    1      -1.643  -0.335  -0.000  1.00  0.00           C
+ATOM      2  H   ETSH    1      -2.602   0.189   0.002  1.00  0.00           H
+ATOM      3  H   ETSH    1      -1.607  -0.975   0.885  1.00  0.00           H
+ATOM      4  H   ETSH    1      -1.609  -0.975  -0.886  1.00  0.00           H
+ATOM      5  C   ETSH    1      -0.498   0.673  -0.000  1.00  0.00           C
+ATOM      6  H   ETSH    1      -0.545   1.307  -0.886  1.00  0.00           H
+ATOM      7  H   ETSH    1      -0.544   1.305   0.887  1.00  0.00           H
+ATOM      8  S   ETSH    1       1.115  -0.233   0.000  1.00  0.00           S
+ATOM      9  H   ETSH    1       1.915   0.853  -0.001  1.00  0.00           H
+TER
+ENDMDL
+END

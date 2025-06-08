@@ -1,0 +1,16 @@
+TITLE     ETAM optimized with Gaussian
+MODEL     1
+ATOM      1  C   ETAM    1       1.298  -0.270   0.000  1.00  0.00           C
+ATOM      2  H   ETAM    1       1.352  -0.901  -0.891  1.00  0.00           H
+ATOM      3  H   ETAM    1       2.180   0.372  -0.001  1.00  0.00           H
+ATOM      4  H   ETAM    1       1.353  -0.899   0.892  1.00  0.00           H
+ATOM      5  C   ETAM    1       0.061   0.609  -0.000  1.00  0.00           C
+ATOM      6  H   ETAM    1      -0.006   1.239   0.887  1.00  0.00           H
+ATOM      7  H   ETAM    1      -0.006   1.239  -0.887  1.00  0.00           H
+ATOM      8  N   ETAM    1      -1.211  -0.245   0.000  1.00  0.00           N
+ATOM      9  H   ETAM    1      -2.057   0.332   0.002  1.00  0.00           H
+ATOM     10  H   ETAM    1      -1.248  -0.850  -0.826  1.00  0.00           H
+ATOM     11  H   ETAM    1      -1.246  -0.853   0.825  1.00  0.00           H
+TER
+ENDMDL
+END

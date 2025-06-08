@@ -1,0 +1,12 @@
+TITLE     ACET optimized with Gaussian
+MODEL     1
+ATOM      1  C   ACET    1      -1.355   0.051  -0.001  1.00  0.00           C
+ATOM      2  H   ACET    1      -1.745  -0.533  -0.844  1.00  0.00           H
+ATOM      3  H   ACET    1      -1.730   1.078  -0.059  1.00  0.00           H
+ATOM      4  H   ACET    1      -1.734  -0.423   0.914  1.00  0.00           H
+ATOM      5  C   ACET    1       0.221  -0.002  -0.002  1.00  0.00           C
+ATOM      6  O   ACET    1       0.699  -1.159   0.000  1.00  0.00           O
+ATOM      7  O   ACET    1       0.802   1.107   0.000  1.00  0.00           O
+TER
+ENDMDL
+END

@@ -1,0 +1,12 @@
+PARA /pubhome/soft/silcsbio.2024.1/data/charmm36/par_all36m_prot.prm
+PARA /pubhome/soft/silcsbio.2024.1/data/charmm36/par_all36_na.prm
+PARA /pubhome/soft/silcsbio.2024.1/data/charmm36/par_all36_carb.prm
+PARA /pubhome/soft/silcsbio.2024.1/data/charmm36/par_all36_lipid.prm
+PARA /pubhome/soft/silcsbio.2024.1/data/charmm36/par_water_ions.str
+CGENFF_RULES  /pubhome/soft/silcsbio.2024.1/data/cgenff/cgenff.rules
+CGENFF_PAR  /pubhome/soft/silcsbio.2024.1/data/cgenff/par_all36_cgenff.prm
+CHARMMFFDIR_GMX  charmm36.ff
+LIGAND_MOL2  1tolu_4setup.mol2
+GMX_PDB  1tolu_gmx.pdb
+GMX_TOPOL  1tolu_gmx.top
+OUTCGENFFSTRFILE  1tolu_charmm_gmx.str

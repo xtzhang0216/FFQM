@@ -1,0 +1,74 @@
+[ moleculetype ]
+; Name            nrexcl
+etoh               3
+;
+[ atoms ]
+;   nr       type  resnr residue  atom   cgnr     charge       mass  typeB    chargeB      massB
+; residue   1 1et rtp 1et  q -0.0
+     1      CG331      1    1et     C1      1     -0.272     12.011   ; qtot -0.272
+     2       HGA3      1    1et     H2      2       0.09      1.008   ; qtot 0.09
+     3       HGA3      1    1et     H3      3       0.09      1.008   ; qtot 0.09
+     4       HGA3      1    1et     H4      4       0.09      1.008   ; qtot 0.09
+     5      CG321      1    1et     C5      5      0.053     12.011   ; qtot 0.053
+     6       HGA2      1    1et     H6      6       0.09      1.008   ; qtot 0.09
+     7       HGA2      1    1et     H7      7       0.09      1.008   ; qtot 0.09
+     8      OG311      1    1et     O8      8      -0.65    15.9994   ; qtot -0.65
+     9       HGP1      1    1et     H9      9      0.419      1.008   ; qtot 0.419
+
+[ bonds ]
+;  ai    aj funct            c0            c1            c2            c3
+    4     1     1
+    2     1     1
+    1     5     1
+    1     3     1
+    7     5     1
+    6     5     1
+    5     8     1
+    8     9     1
+
+[ pairs ]
+;  ai    aj funct            c0            c1            c2            c3
+    1     9     1
+    2     6     1
+    2     7     1
+    2     8     1
+    3     6     1
+    3     7     1
+    3     8     1
+    4     6     1
+    4     7     1
+    4     8     1
+    6     9     1
+    7     9     1
+
+[ angles ]
+;  ai    aj    ak funct            c0            c1            c2            c3
+    4     1     2     5
+    4     1     5     5
+    4     1     3     5
+    2     1     5     5
+    2     1     3     5
+    5     1     3     5
+    1     5     7     5
+    1     5     6     5
+    1     5     8     5
+    7     5     6     5
+    7     5     8     5
+    6     5     8     5
+    5     8     9     5
+
+[ dihedrals ]
+;  ai    aj    ak    al funct            c0            c1            c2            c3            c4            c5
+    4     1     5     7     9
+    4     1     5     6     9
+    4     1     5     8     9
+    2     1     5     7     9
+    2     1     5     6     9
+    2     1     5     8     9
+    3     1     5     7     9
+    3     1     5     6     9
+    3     1     5     8     9
+    1     5     8     9     9
+    7     5     8     9     9
+    6     5     8     9     9
+

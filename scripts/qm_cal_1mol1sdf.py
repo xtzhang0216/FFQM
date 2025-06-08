@@ -160,15 +160,15 @@ if __name__ == "__main__":
     from ase.units import eV,mol,kcal,Hartree
     orca_energy = orca_energy * Hartree/(kcal/mol)
     print(f'{name} {round(orca_energy,2)}')
-    folder = f'/pubhome/xtzhang/interaction/data/csd_pairs/modified_orca/'
-    # folder = f'/pubhome/xtzhang/interaction/data/{args.central_smiles}_{args.contact_smiles}_orca'
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-    # num = len([file for file in os.listdir(folder) if file.startswith(name)])
-    # print(f'{folder}/{name}_{num}.json.gz')
+    # folder = f'/pubhome/xtzhang/interaction/data/csd_pairs/modified_orca/'
+    # # folder = f'/pubhome/xtzhang/interaction/data/{args.central_smiles}_{args.contact_smiles}_orca'
+    # if not os.path.exists(folder):
+    #     os.makedirs(folder)
+    # # num = len([file for file in os.listdir(folder) if file.startswith(name)])
+    # # print(f'{folder}/{name}_{num}.json.gz')
 
-    # 检查文件.json.gz是否存在，如果已经存在，则其他后缀
-    # if os.path.exists(f'{folder}/{name}.json.gz'):
-        # 已经同样name的数量
+    # # 检查文件.json.gz是否存在，如果已经存在，则其他后缀
+    # # if os.path.exists(f'{folder}/{name}.json.gz'):
+    #     # 已经同样name的数量
 
-    tools.json_gzip_dump(data,f'{folder}/{frag_name}/{name}.json.gz')
+    # tools.json_gzip_dump(data,f'{folder}/{frag_name}/{name}.json.gz')

@@ -1,0 +1,17 @@
+TITLE     MIME optimized with Gaussian
+MODEL     1
+ATOM      1  C   MIME    1       2.152  -0.010   0.000  1.00  0.00           C
+ATOM      2  H   MIME    1       2.568   0.999  -0.000  1.00  0.00           H
+ATOM      3  H   MIME    1       2.530  -0.538  -0.880  1.00  0.00           H
+ATOM      4  H   MIME    1       2.530  -0.537   0.881  1.00  0.00           H
+ATOM      5  C   MIME    1       0.657   0.020  -0.000  1.00  0.00           C
+ATOM      6  C   MIME    1      -0.180   1.107   0.000  1.00  0.00           C
+ATOM      7  H   MIME    1       0.011   2.167  -0.001  1.00  0.00           H
+ATOM      8  N   MIME    1      -1.461   0.590   0.000  1.00  0.00           N
+ATOM      9  H   MIME    1      -2.318   1.120   0.001  1.00  0.00           H
+ATOM     10  C   MIME    1      -1.343  -0.768  -0.000  1.00  0.00           C
+ATOM     11  H   MIME    1      -2.200  -1.424   0.000  1.00  0.00           H
+ATOM     12  N   MIME    1      -0.086  -1.144  -0.000  1.00  0.00           N
+TER
+ENDMDL
+END

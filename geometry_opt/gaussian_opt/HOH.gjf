@@ -1,0 +1,12 @@
+%chk=HOH.chk
+%mem=8GB
+%nprocshared=12
+#p B3LYP/6-311G** Opt=cartesian
+
+Geometry optimization of HOH using B3LYP/6-311G**
+
+0 1
+O      0.634000     0.695000     2.706000
+H      0.357000    -0.185000     3.092000
+H     -0.109000     1.137000     2.206000
+

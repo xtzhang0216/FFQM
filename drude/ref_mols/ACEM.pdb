@@ -1,0 +1,13 @@
+HETATM    1  CL  ACEM    1       4.150  -2.595  -1.578  1.00  0.00           C  
+HETATM    2  HL1 ACEM    1       3.796  -2.341  -0.669  1.00  0.00           H  
+HETATM    3  HL2 ACEM    1       4.745  -1.850  -1.905  1.00  0.00           H  
+HETATM    4  HL3 ACEM    1       4.781  -3.474  -1.443  1.00  0.00           H  
+HETATM    5  C   ACEM    1       3.003  -2.765  -2.527  1.00  0.00           C  
+HETATM    6  N   ACEM    1       1.845  -2.163  -2.266  1.00  0.00           N  
+HETATM    7  HT  ACEM    1       1.793  -1.602  -1.425  1.00  0.00           H  
+HETATM    8  HC  ACEM    1       1.073  -2.258  -2.865  1.00  0.00           H  
+HETATM    9  O   ACEM    1       3.168  -3.474  -3.588  1.00  0.00           O  
+CONECT    1    2    3    4    5
+CONECT    5    6    9    9
+CONECT    6    7    8
+END
